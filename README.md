@@ -1,2 +1,2 @@
-# gulpfile
+# Gulp File
 A sample gulp file to use with Node package manager in several projects.
