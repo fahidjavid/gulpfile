@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/fahidjavid/gulpfile/issues"
   },
-  "homepage": "https://github.com/fahidjavid/gulpfile#readme"
+  "homepage": "https://github.com/fahidjavid/gulpfile#readme",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  }
 }
