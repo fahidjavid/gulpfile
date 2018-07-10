@@ -21,7 +21,9 @@ var projectURL = 'code-gulpfile.o'
 /**
  * Tasks
  *
- * 'default' - task to check if everything is working fine
+ * 'default' - Check if everything is working fine
+ * 'styles' - Compile source Sass files into CSS and put on their destination
+ * 'npm-update-all' - Update all dependencies & devDependencies in package.json at once.
  */
 
 
@@ -57,4 +59,10 @@ gulp.task('styles', function () {
 
         .pipe(gulp.dest(cssDestination))
         .pipe(notify({message: 'TASK: "styles" Completed! 💯', onLast: true}))
+});
+
+gulp.task('npm-update-all', function () {
+    var updateAll = require('npm-update-all');
+    var json = require('./package.json');
+    updateAll(json);
 });
