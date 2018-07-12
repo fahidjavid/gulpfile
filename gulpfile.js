@@ -16,14 +16,15 @@ var rename = require("gulp-rename");
 ////////////////////////////////////////////////////////////
 var styleWatchFiles = 'scss/**/*.scss';
 var PHPWatchFiles = './**/*.php';
-var projectURL = 'code-gulpfile.o'
+var projectURL = 'code-gulpfile.o';
 
 /**
  * Tasks
  *
  * 'default' - Check if everything is working fine
  * 'styles' - Compile source Sass files into CSS and put on their destination
- * 'npm-update-all' - Update all dependencies & devDependencies in package.json at once.
+ * 'npm-update-all' - Update all dependencies & devDependencies in package.json at once
+ * 'zip' - Update all dependencies & devDependencies in package.json at once
  */
 
 
@@ -31,11 +32,12 @@ var projectURL = 'code-gulpfile.o'
 // Script Tasks
 ////////////////////////////////////////////////////////////
 
-// Checks if everything running fine.
+// Check if everything is working fine
 gulp.task('default', function () {
     console.log("Hey! I am here :)");
 });
 
+// Compile source Sass files into CSS and put on their destination
 gulp.task('styles', function () {
 
     var cssDestination = 'css';
@@ -61,8 +63,38 @@ gulp.task('styles', function () {
         .pipe(notify({message: 'TASK: "styles" Completed! 💯', onLast: true}))
 });
 
+// Update all dependencies & devDependencies in package.json at once
 gulp.task('npm-update-all', function () {
     var updateAll = require('npm-update-all');
     var json = require('./package.json');
     updateAll(json);
+});
+
+// Build project zip
+gulp.task('zip', function () {
+    return gulp.src( [
+        // Include
+        './**/*',
+
+        // Exclude
+        '!./prepros.cfg',
+        '!./**/.DS_Store',
+        '!./**/*.map',
+        '!./**/*.scss',
+        '!./scss/**/',
+        '!./node_modules/**',
+        '!./node_modules',
+        '!./package.json',
+        '!./package-lock.json',
+        '!./bower_components/**',
+        '!./bower_components',
+        '!./bower.json',
+        '!./gulpfile.js'
+    ])
+        .pipe ( zip ( 'project.zip' ) )
+        .pipe ( gulp.dest ( '../' ) )
+        .pipe ( notify ( {
+            message : 'Project zip is ready.',
+            onLast : true
+        } ) );
 });
