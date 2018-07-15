@@ -15,6 +15,7 @@ var rename = require("gulp-rename");
 // Global utility variables
 ////////////////////////////////////////////////////////////
 var styleWatchFiles = 'scss/**/*.scss';
+var jsWatchFiles = 'js/**/*.js';
 var PHPWatchFiles = './**/*.php';
 var projectURL = 'code-gulpfile.o';
 
@@ -25,6 +26,7 @@ var projectURL = 'code-gulpfile.o';
  * 'styles' - Compile source Sass files into CSS and put on their destination
  * 'npm-update-all' - Update all dependencies & devDependencies in package.json at once
  * 'zip' - Update all dependencies & devDependencies in package.json at once
+ * 'watch-js' - Watch JS files and reload page on changes
  */
 
 
@@ -97,4 +99,14 @@ gulp.task('zip', function () {
             message : 'Project zip is ready.',
             onLast : true
         } ) );
+});
+
+// Watch JS file changes
+gulp.task('watch-js', function() {
+    gulp.watch(jsWatchFiles, ['js']);
+});
+
+gulp.task('js', function () {
+    return gulp.src(jsWatchFiles)
+        .pipe(reload({stream:true}));
 });
