@@ -10,6 +10,8 @@ var zip = require('gulp-zip');
 var browserSync = require('browser-sync').create(); // Reloads browser and injects CSS. Time-saving synchronised browser testing.
 var reload = browserSync.reload; // For manual browser reload.
 var rename = require("gulp-rename");
+var concat = require('gulp-concat');
+var order = require("gulp-order");
 
 /////////////////////////////////////////////////////////////
 // Global utility variables
@@ -74,7 +76,7 @@ gulp.task('npm-update-all', function () {
 
 // Build project zip
 gulp.task('zip', function () {
-    return gulp.src( [
+    return gulp.src([
         // Include
         './**/*',
 
@@ -93,20 +95,36 @@ gulp.task('zip', function () {
         '!./bower.json',
         '!./gulpfile.js'
     ])
-        .pipe ( zip ( 'project.zip' ) )
-        .pipe ( gulp.dest ( '../' ) )
-        .pipe ( notify ( {
-            message : 'Project zip is ready.',
-            onLast : true
-        } ) );
+        .pipe(zip('project.zip'))
+        .pipe(gulp.dest('../'))
+        .pipe(notify({
+            message: 'Project zip is ready.',
+            onLast: true
+        }));
 });
 
 // Watch JS file changes
-gulp.task('watch-js', function() {
+gulp.task('watch-js', function () {
     gulp.watch(jsWatchFiles, ['js']);
 });
 
 gulp.task('js', function () {
     return gulp.src(jsWatchFiles)
-        .pipe(reload({stream:true}));
+        .pipe(reload({stream: true}));
+});
+
+// Concatenate JS File
+gulp.task('unify-js', function () {
+    return gulp.src([
+        './js/custom.js',
+        './js/public.js',
+    ])
+        .pipe(plumber())
+        .pipe(order([
+            'public.js',
+            'custom.js',
+        ]))
+        .pipe(concat('all-scripts.js'))
+        .pipe(plumber.stop())
+        .pipe(gulp.dest('./js'));
 });
